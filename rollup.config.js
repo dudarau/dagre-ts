@@ -38,7 +38,7 @@ export default [
   bundle('umd', pkg.browser.replace('.min', ''), { resolve: true, stats: true }),
   bundle('umd', pkg.browser, { resolve: true, minimize: true }),
   {
-    input: 'src/lib/index.ts',
+    input: './index.ts',
     output: {
       file: pkg.types,
       format: 'es',

@@ -6,7 +6,10 @@
   "contributors": [
   ],
   "license": "MIT",
-  "main": "index.js",
+  "main": "dist/dagre-ts.cjs.js",
+  "module": "dist/dagre-ts.esm.js",
+  "browser": "dist/dagre-ts.umd.min.js",
+  "types": "dist/dagre-ts.d.ts",
   "keywords": [
     "graph",
     "layout"
