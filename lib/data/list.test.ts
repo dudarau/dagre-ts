@@ -12,14 +12,14 @@ describe('data.List dequeue', function () {
   });
 
   it('unlinks and returns the first entry', function () {
-    var obj = {};
+    const obj = {};
     list.enqueue(obj);
     expect(list.dequeue()).toEqual(obj);
   });
 
   it('unlinks and returns multiple entries in FIFO order', function () {
-    var obj1 = {};
-    var obj2 = {};
+    const obj1 = {};
+    const obj2 = {};
     list.enqueue(obj1);
     list.enqueue(obj2);
 
@@ -28,8 +28,8 @@ describe('data.List dequeue', function () {
   });
 
   it('unlinks and relinks an entry if it is re-enqueued', function () {
-    var obj1 = {};
-    var obj2 = {};
+    const obj1 = {};
+    const obj2 = {};
     list.enqueue(obj1);
     list.enqueue(obj2);
     list.enqueue(obj1);
@@ -39,8 +39,8 @@ describe('data.List dequeue', function () {
   });
 
   it('unlinks and relinks an entry if it is enqueued on another list', function () {
-    var obj = {};
-    var list2 = new List();
+    const obj = {};
+    const list2 = new List();
     list.enqueue(obj);
     list2.enqueue(obj);
 

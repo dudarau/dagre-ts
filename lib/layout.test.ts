@@ -1,10 +1,10 @@
-var _ = require("lodash");
-var expect = require("./chai").expect;
-var layout = require("..").layout;
-var Graph = require("../lib/graphlib").Graph;
+const _ from "lodash");
+const expect from "../test/chai").expect;
+const layout from "../dist/dagre-ts").layout;
+import { Graph } from 'graphlib';
 
 describe("layout", function() {
-  var g;
+  const g;
 
   beforeEach(function() {
     g = new Graph({ multigraph: true, compound: true })
@@ -15,11 +15,11 @@ describe("layout", function() {
   it("can layout a single node", function() {
     g.setNode("a", { width: 50, height: 100 });
     layout(g);
-    expect(extractCoordinates(g)).to.eql({
+    expect(extractCoordinates(g)).toEqual({
       a: { x: 50 / 2, y: 100 / 2 }
     });
-    expect(g.node("a").x).to.equal(50 / 2);
-    expect(g.node("a").y).to.equal(100 / 2);
+    expect(g.node("a").x).toBe(50 / 2);
+    expect(g.node("a").y).toBe(100 / 2);
   });
 
   it("can layout two nodes on the same rank", function() {
@@ -27,7 +27,7 @@ describe("layout", function() {
     g.setNode("a", { width: 50, height: 100 });
     g.setNode("b", { width: 75, height: 200 });
     layout(g);
-    expect(extractCoordinates(g)).to.eql({
+    expect(extractCoordinates(g)).toEqual({
       a: { x: 50 / 2,            y: 200 / 2 },
       b: { x: 50 + 200 + 75 / 2, y: 200 / 2 }
     });
@@ -39,7 +39,7 @@ describe("layout", function() {
     g.setNode("b", { width: 75, height: 200 });
     g.setEdge("a", "b");
     layout(g);
-    expect(extractCoordinates(g)).to.eql({
+    expect(extractCoordinates(g)).toEqual({
       a: { x: 75 / 2, y: 100 / 2 },
       b: { x: 75 / 2, y: 100 + 300 + 200 / 2 }
     });
@@ -55,12 +55,12 @@ describe("layout", function() {
     g.setNode("b", { width: 75, height: 200 });
     g.setEdge("a", "b", { width: 60, height: 70, labelpos: "c" });
     layout(g);
-    expect(extractCoordinates(g)).to.eql({
+    expect(extractCoordinates(g)).toEqual({
       a: { x: 75 / 2, y: 100 / 2 },
       b: { x: 75 / 2, y: 100 + 150 + 70 + 150 + 200 / 2 }
     });
     expect(_.pick(g.edge("a", "b"), ["x", "y"]))
-      .eqls({ x: 75 / 2, y: 100  + 150 + 70 / 2 });
+      .toEqual({ x: 75 / 2, y: 100  + 150 + 70 / 2 });
   });
 
   describe("can layout an edge with a long label, with rankdir =", function() {
@@ -75,7 +75,7 @@ describe("layout", function() {
         g.setEdge("b", "d", { width: 1, height: 1 });
         layout(g);
 
-        var p1, p2;
+        const p1, p2;
         if (rankdir === "TB" || rankdir === "BT") {
           p1 = g.edge("a", "c");
           p2 = g.edge("b", "d");
@@ -102,11 +102,11 @@ describe("layout", function() {
         layout(g);
 
         if (rankdir === "TB" || rankdir === "BT") {
-          expect(g.edge("a", "b").x - g.edge("a", "b").points[0].x).equals(-1000 - 10 / 2);
-          expect(g.edge("c", "d").x - g.edge("c", "d").points[0].x).equals(1000 + 10 / 2);
+          expect(g.edge("a", "b").x - g.edge("a", "b").points[0].x).toBe(-1000 - 10 / 2);
+          expect(g.edge("c", "d").x - g.edge("c", "d").points[0].x).toBe(1000 + 10 / 2);
         } else {
-          expect(g.edge("a", "b").y - g.edge("a", "b").points[0].y).equals(-1000 - 10 / 2);
-          expect(g.edge("c", "d").y - g.edge("c", "d").points[0].y).equals(1000 + 10 / 2);
+          expect(g.edge("a", "b").y - g.edge("a", "b").points[0].y).toBe(-1000 - 10 / 2);
+          expect(g.edge("c", "d").y - g.edge("c", "d").points[0].y).toBe(1000 + 10 / 2);
         }
       });
     });
@@ -118,7 +118,7 @@ describe("layout", function() {
     g.setNode("b", { width: 75, height: 200 });
     g.setEdge("a", "b", { width: 60, height: 70, minlen: 2, labelpos: "c" });
     layout(g);
-    expect(g.edge("a", "b").x).to.equal(75 / 2);
+    expect(g.edge("a", "b").x).toBe(75 / 2);
     expect(g.edge("a", "b").y)
       .to.be.gt(g.node("a").y)
       .to.be.lt(g.node("b").y);
@@ -131,7 +131,7 @@ describe("layout", function() {
     g.setEdge("a", "b", { weight: 2 });
     g.setEdge("b", "a");
     layout(g);
-    expect(extractCoordinates(g)).to.eql({
+    expect(extractCoordinates(g)).toEqual({
       a: { x: 100 / 2, y: 100 / 2 },
       b: { x: 100 / 2, y: 100 + 200 + 100 / 2}
     });
@@ -146,9 +146,9 @@ describe("layout", function() {
     g.setNode("b", { width: 100, height: 100 });
     g.setEdge("a", "b");
     layout(g);
-    var points = g.edge("a", "b").points;
+    const points = g.edge("a", "b").points;
     expect(points).to.have.length(3);
-    expect(points).eqls([
+    expect(points).toEqual([
       { x: 100 / 2, y: 100 },           // intersect with bottom of a
       { x: 100 / 2, y: 100 + 200 / 2 }, // point for edge label
       { x: 100 / 2, y: 100 + 200 }      // intersect with top of b
@@ -161,9 +161,9 @@ describe("layout", function() {
     g.setNode("b", { width: 100, height: 100 });
     g.setEdge("a", "b", { minlen: 2 });
     layout(g);
-    var points = g.edge("a", "b").points;
+    const points = g.edge("a", "b").points;
     expect(points).to.have.length(5);
-    expect(points).eqls([
+    expect(points).toEqual([
       { x: 100 / 2, y: 100 },           // intersect with bottom of a
       { x: 100 / 2, y: 100 + 200 / 2 }, // bend #1
       { x: 100 / 2, y: 100 + 400 / 2 }, // point for edge label
@@ -180,8 +180,8 @@ describe("layout", function() {
         g.setNode("a", { width: 100, height: 100 });
         g.setEdge("a", "a", { width: 50, height: 50 });
         layout(g);
-        var nodeA = g.node("a");
-        var points = g.edge("a", "a").points;
+        const nodeA = g.node("a");
+        const points = g.edge("a", "a").points;
         expect(points).to.have.length(7);
         _.forEach(points, function(point) {
           if (rankdir !== "LR" && rankdir !== "RL") {
@@ -218,7 +218,7 @@ describe("layout", function() {
     // force nodes x and y to be on different ranks, which we want our ranker
     // to avoid.
     layout(g);
-    expect(g.node("x").y).to.equal(g.node("y").y);
+    expect(g.node("x").y).toBe(g.node("y").y);
   });
 
   it("can layout subgraphs with different rankdirs", function() {
@@ -243,8 +243,8 @@ describe("layout", function() {
   it("adds dimensions to the graph", function() {
     g.setNode("a", { width: 100, height: 50 });
     layout(g);
-    expect(g.graph().width).equals(100);
-    expect(g.graph().height).equals(50);
+    expect(g.graph().width).toBe(100);
+    expect(g.graph().height).toBe(50);
   });
 
   describe("ensures all coordinates are in the bounding box for the graph", function() {
@@ -257,8 +257,8 @@ describe("layout", function() {
         it("node", function() {
           g.setNode("a", { width: 100, height: 200 });
           layout(g);
-          expect(g.node("a").x).equals(100 / 2);
-          expect(g.node("a").y).equals(200 / 2);
+          expect(g.node("a").x).toBe(100 / 2);
+          expect(g.node("a").y).toBe(200 / 2);
         });
 
         it("edge, labelpos = l", function() {
@@ -269,9 +269,9 @@ describe("layout", function() {
           });
           layout(g);
           if (rankdir === "TB" || rankdir === "BT") {
-            expect(g.edge("a", "b").x).equals(1000 / 2);
+            expect(g.edge("a", "b").x).toBe(1000 / 2);
           } else {
-            expect(g.edge("a", "b").y).equals(2000 / 2);
+            expect(g.edge("a", "b").y).toBe(2000 / 2);
           }
         });
       });
@@ -283,7 +283,7 @@ describe("layout", function() {
     g.setNode("a", { width: 50, height: 100 });
     g.setNode("b", { width: 75, height: 200 });
     layout(g);
-    expect(extractCoordinates(g)).to.eql({
+    expect(extractCoordinates(g)).toEqual({
       a: { x: 50 / 2,            y: 200 / 2 },
       b: { x: 50 + 200 + 75 / 2, y: 200 / 2 }
     });
@@ -291,7 +291,7 @@ describe("layout", function() {
 });
 
 function extractCoordinates(g) {
-  var nodes = g.nodes();
+  const nodes = g.nodes();
   return _.zipObject(nodes, _.map(nodes, function(v) {
     return _.pick(g.node(v), ["x", "y"]);
   }));

@@ -1,43 +1,42 @@
-var _ = require("lodash");
-var expect = require("./chai").expect;
-var Graph = require("../lib/graphlib").Graph;
-var findCycles = require("../lib/graphlib").alg.findCycles;
-var greedyFAS = require("../lib/greedy-fas");
+const expect from "../test/chai").expect;
+import { Graph } from 'graphlib';
+const findCycles from "./graphlib").alg.findCycles;
+const greedyFAS from "./greedy-fas");
 
 describe("greedyFAS", function() {
-  var g;
+  const g;
 
   beforeEach(function() {
     g = new Graph();
   });
 
   it("returns the empty set for empty graphs", function() {
-    expect(greedyFAS(g)).to.eql([]);
+    expect(greedyFAS(g)).toEqual([]);
   });
 
   it("returns the empty set for single-node graphs", function() {
     g.setNode("a");
-    expect(greedyFAS(g)).to.eql([]);
+    expect(greedyFAS(g)).toEqual([]);
   });
 
   it("returns an empty set if the input graph is acyclic", function() {
-    var g = new Graph();
+    const g = new Graph();
     g.setEdge("a", "b");
     g.setEdge("b", "c");
     g.setEdge("b", "d");
     g.setEdge("a", "e");
-    expect(greedyFAS(g)).to.eql([]);
+    expect(greedyFAS(g)).toEqual([]);
   });
 
   it("returns a single edge with a simple cycle", function() {
-    var g = new Graph();
+    const g = new Graph();
     g.setEdge("a", "b");
     g.setEdge("b", "a");
     checkFAS(g, greedyFAS(g));
   });
 
   it("returns a single edge in a 4-node cycle", function() {
-    var g = new Graph();
+    const g = new Graph();
     g.setEdge("n1", "n2");
     g.setPath(["n2", "n3", "n4", "n5", "n2"]);
     g.setEdge("n3", "n5");
@@ -47,7 +46,7 @@ describe("greedyFAS", function() {
   });
 
   it("returns two edges for two 4-node cycles", function() {
-    var g = new Graph();
+    const g = new Graph();
     g.setEdge("n1", "n2");
     g.setPath(["n2", "n3", "n4", "n5", "n2"]);
     g.setEdge("n3", "n5");
@@ -66,23 +65,23 @@ describe("greedyFAS", function() {
     // the same pair of incident nodes. We try this by assigning weights to
     // our edges representing the number of edges from one node to the other.
 
-    var g1 = new Graph();
+    const g1 = new Graph();
     g1.setEdge("n1", "n2", 2);
     g1.setEdge("n2", "n1", 1);
-    expect(greedyFAS(g1, weightFn(g1))).to.eql([{v: "n2", w: "n1"}]);
+    expect(greedyFAS(g1, weightFn(g1))).toEqual([{v: "n2", w: "n1"}]);
 
-    var g2 = new Graph();
+    const g2 = new Graph();
     g2.setEdge("n1", "n2", 1);
     g2.setEdge("n2", "n1", 2);
-    expect(greedyFAS(g2, weightFn(g2))).to.eql([{v: "n1", w: "n2"}]);
+    expect(greedyFAS(g2, weightFn(g2))).toEqual([{v: "n1", w: "n2"}]);
   });
 
   it("works for multigraphs", function() {
-    var g = new Graph({ multigraph: true });
+    const g = new Graph({ multigraph: true });
     g.setEdge("a", "b", 5, "foo");
     g.setEdge("b", "a", 2, "bar");
     g.setEdge("b", "a", 2, "baz");
-    expect(_.sortBy(greedyFAS(g, weightFn(g)), "name")).to.eql([
+    expect(_.sortBy(greedyFAS(g, weightFn(g)), "name")).toEqual([
       { v: "b", w: "a", name: "bar" },
       { v: "b", w: "a", name: "baz" }
     ]);
@@ -90,12 +89,12 @@ describe("greedyFAS", function() {
 });
 
 function checkFAS(g, fas) {
-  var n = g.nodeCount();
-  var m = g.edgeCount();
+  const n = g.nodeCount();
+  const m = g.edgeCount();
   _.forEach(fas, function(edge) {
     g.removeEdge(edge.v, edge.w);
   });
-  expect(findCycles(g)).to.eql([]);
+  expect(findCycles(g)).toEqual([]);
   // The more direct m/2 - n/6 fails for the simple cycle A <-> B, where one
   // edge must be reversed, but the performance bound implies that only 2/3rds
   // of an edge can be reversed. I'm using floors to acount for this.

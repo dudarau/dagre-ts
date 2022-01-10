@@ -1,10 +1,10 @@
-var _ = require("lodash");
-var expect = require("./chai").expect;
-var normalize = require("../lib/normalize");
-var Graph = require("../lib/graphlib").Graph;
+const _ from "lodash");
+const expect from "../test/chai").expect;
+const normalize from "./normalize");
+import { Graph } from 'graphlib';
 
 describe("normalize", function() {
-  var g;
+  const g;
 
   beforeEach(function() {
     g = new Graph({ multigraph: true, compound: true }).setGraph({});
@@ -18,9 +18,9 @@ describe("normalize", function() {
 
       normalize.run(g);
 
-      expect(_.map(g.edges(), incidentNodes)).to.eql([{ v: "a", w: "b" }]);
-      expect(g.node("a").rank).to.equal(0);
-      expect(g.node("b").rank).to.equal(1);
+      expect(_.map(g.edges(), incidentNodes)).toEqual([{ v: "a", w: "b" }]);
+      expect(g.node("a").rank).toBe(0);
+      expect(g.node("b").rank).toBe(1);
     });
 
     it("splits a two layer edge into two segments", function() {
@@ -31,15 +31,15 @@ describe("normalize", function() {
       normalize.run(g);
 
       expect(g.successors("a")).to.have.length(1);
-      var successor = g.successors("a")[0];
-      expect(g.node(successor).dummy).to.equal("edge");
-      expect(g.node(successor).rank).to.equal(1);
-      expect(g.successors(successor)).to.eql(["b"]);
-      expect(g.node("a").rank).to.equal(0);
-      expect(g.node("b").rank).to.equal(2);
+      const successor = g.successors("a")[0];
+      expect(g.node(successor).dummy).toBe("edge");
+      expect(g.node(successor).rank).toBe(1);
+      expect(g.successors(successor)).toEqual(["b"]);
+      expect(g.node("a").rank).toBe(0);
+      expect(g.node("b").rank).toBe(2);
 
       expect(g.graph().dummyChains).to.have.length(1);
-      expect(g.graph().dummyChains[0]).to.equal(successor);
+      expect(g.graph().dummyChains[0]).toBe(successor);
     });
 
     it("assigns width = 0, height = 0 to dummy nodes by default", function() {
@@ -50,9 +50,9 @@ describe("normalize", function() {
       normalize.run(g);
 
       expect(g.successors("a")).to.have.length(1);
-      var successor = g.successors("a")[0];
-      expect(g.node(successor).width).to.equal(0);
-      expect(g.node(successor).height).to.equal(0);
+      const successor = g.successors("a")[0];
+      expect(g.node(successor).width).toBe(0);
+      expect(g.node(successor).height).toBe(0);
     });
 
     it("assigns width and height from the edge for the node on labelRank", function() {
@@ -62,10 +62,10 @@ describe("normalize", function() {
 
       normalize.run(g);
 
-      var labelV = g.successors(g.successors("a")[0])[0];
-      var labelNode = g.node(labelV);
-      expect(labelNode.width).to.equal(20);
-      expect(labelNode.height).to.equal(10);
+      const labelV = g.successors(g.successors("a")[0])[0];
+      const labelNode = g.node(labelV);
+      expect(labelNode.width).toBe(20);
+      expect(labelNode.height).toBe(10);
     });
 
     it("preserves the weight for the edge", function() {
@@ -76,7 +76,7 @@ describe("normalize", function() {
       normalize.run(g);
 
       expect(g.successors("a")).to.have.length(1);
-      expect(g.edge("a", g.successors("a")[0]).weight).to.equal(2);
+      expect(g.edge("a", g.successors("a")[0]).weight).toBe(2);
     });
   });
 
@@ -89,9 +89,9 @@ describe("normalize", function() {
       normalize.run(g);
       normalize.undo(g);
 
-      expect(_.map(g.edges(), incidentNodes)).to.eql([{ v: "a", w: "b" }]);
-      expect(g.node("a").rank).to.equal(0);
-      expect(g.node("b").rank).to.equal(2);
+      expect(_.map(g.edges(), incidentNodes)).toEqual([{ v: "a", w: "b" }]);
+      expect(g.node("a").rank).toBe(0);
+      expect(g.node("b").rank).toBe(2);
     });
 
     it("restores previous edge labels", function() {
@@ -102,7 +102,7 @@ describe("normalize", function() {
       normalize.run(g);
       normalize.undo(g);
 
-      expect(g.edge("a", "b").foo).equals("bar");
+      expect(g.edge("a", "b").foo).toBe("bar");
     });
 
     it("collects assigned coordinates into the 'points' attribute", function() {
@@ -112,13 +112,13 @@ describe("normalize", function() {
 
       normalize.run(g);
 
-      var dummyLabel = g.node(g.neighbors("a")[0]);
+      const dummyLabel = g.node(g.neighbors("a")[0]);
       dummyLabel.x = 5;
       dummyLabel.y = 10;
 
       normalize.undo(g);
 
-      expect(g.edge("a", "b").points).eqls([{ x: 5, y: 10 }]);
+      expect(g.edge("a", "b").points).toEqual([{ x: 5, y: 10 }]);
     });
 
     it("merges assigned coordinates into the 'points' attribute", function() {
@@ -128,22 +128,22 @@ describe("normalize", function() {
 
       normalize.run(g);
 
-      var aSucLabel = g.node(g.neighbors("a")[0]);
+      const aSucLabel = g.node(g.neighbors("a")[0]);
       aSucLabel.x = 5;
       aSucLabel.y = 10;
 
-      var midLabel = g.node(g.successors(g.successors("a")[0])[0]);
+      const midLabel = g.node(g.successors(g.successors("a")[0])[0]);
       midLabel.x = 20;
       midLabel.y = 25;
 
-      var bPredLabel = g.node(g.neighbors("b")[0]);
+      const bPredLabel = g.node(g.neighbors("b")[0]);
       bPredLabel.x = 100;
       bPredLabel.y = 200;
 
       normalize.undo(g);
 
       expect(g.edge("a", "b").points)
-        .eqls([{ x: 5, y: 10 }, { x: 20, y: 25 }, { x: 100, y: 200 }]);
+        .toEqual([{ x: 5, y: 10 }, { x: 20, y: 25 }, { x: 100, y: 200 }]);
     });
 
     it("sets coords and dims for the label, if the edge has one", function() {
@@ -153,7 +153,7 @@ describe("normalize", function() {
 
       normalize.run(g);
 
-      var labelNode = g.node(g.successors("a")[0]);
+      const labelNode = g.node(g.successors("a")[0]);
       labelNode.x = 50;
       labelNode.y = 60;
       labelNode.width = 20;
@@ -161,7 +161,7 @@ describe("normalize", function() {
 
       normalize.undo(g);
 
-      expect(_.pick(g.edge("a", "b"), ["x", "y", "width", "height"])).eqls({
+      expect(_.pick(g.edge("a", "b"), ["x", "y", "width", "height"])).toEqual({
         x: 50, y: 60, width: 20, height: 10
       });
     });
@@ -173,7 +173,7 @@ describe("normalize", function() {
 
       normalize.run(g);
 
-      var labelNode = g.node(g.successors(g.successors("a")[0])[0]);
+      const labelNode = g.node(g.successors(g.successors("a")[0])[0]);
       labelNode.x = 50;
       labelNode.y = 60;
       labelNode.width = 20;
@@ -181,7 +181,7 @@ describe("normalize", function() {
 
       normalize.undo(g);
 
-      expect(_.pick(g.edge("a", "b"), ["x", "y", "width", "height"])).eqls({
+      expect(_.pick(g.edge("a", "b"), ["x", "y", "width", "height"])).toEqual({
         x: 50, y: 60, width: 20, height: 10
       });
     });
@@ -194,22 +194,22 @@ describe("normalize", function() {
 
       normalize.run(g);
 
-      var outEdges = _.sortBy(g.outEdges("a"), "name");
+      const outEdges = _.sortBy(g.outEdges("a"), "name");
       expect(outEdges).to.have.length(2);
 
-      var barDummy = g.node(outEdges[0].w);
+      const barDummy = g.node(outEdges[0].w);
       barDummy.x = 5;
       barDummy.y = 10;
 
-      var fooDummy = g.node(outEdges[1].w);
+      const fooDummy = g.node(outEdges[1].w);
       fooDummy.x = 15;
       fooDummy.y = 20;
 
       normalize.undo(g);
 
       expect(g.hasEdge("a", "b")).to.be.false;
-      expect(g.edge("a", "b", "bar").points).eqls([{ x: 5, y: 10 }]);
-      expect(g.edge("a", "b", "foo").points).eqls([{ x: 15, y: 20 }]);
+      expect(g.edge("a", "b", "bar").points).toEqual([{ x: 5, y: 10 }]);
+      expect(g.edge("a", "b", "foo").points).toEqual([{ x: 15, y: 20 }]);
     });
   });
 });
