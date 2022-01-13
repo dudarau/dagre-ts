@@ -20,7 +20,7 @@ module.exports = function(config) {
       'build/dagre.core.js',
 
       'node_modules/chai/chai.js',
-      'test/bundle-test.js'
+      'lib/bundle-test.js'
     ],
 
 
