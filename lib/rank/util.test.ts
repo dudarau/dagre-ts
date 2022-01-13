@@ -1,12 +1,12 @@
 
 import { Graph } from 'graphlib';
-const normalizeRanks from "../util").normalizeRanks;
-const rankUtil from "./util");
+import { normalizeRanks } from "../util";
+import rankUtil from "./util";
 const longestPath = rankUtil.longestPath;
 
 describe("rank/util", function() {
   describe("longestPath", function() {
-    const g;
+    let g: Graph;
 
     beforeEach(function() {
       g = new Graph()

@@ -1,5 +1,5 @@
 import { Graph } from 'graphlib';
-const buildLayerGraph from './build-layer-graph');
+import buildLayerGraph from './build-layer-graph';
 
 describe('order/buildLayerGraph', function () {
   let g: Graph;

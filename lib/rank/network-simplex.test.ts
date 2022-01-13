@@ -10,7 +10,10 @@ const exchangeEdges = networkSimplex.exchangeEdges;
 import { normalizeRanks } from '../util';
 
 describe('network simplex', function () {
-  const g, t, gansnerGraph, gansnerTree;
+  let g: Graph;
+  let t: any;
+  let gansnerGraph: Graph;
+  let gansnerTree: any;
 
   beforeEach(function () {
     g = new Graph({ multigraph: true })
@@ -120,7 +123,7 @@ describe('network simplex', function () {
       const tree = new Graph({ directed: false });
       tree.setEdge('a', 'b', { cutvalue: 1 });
       tree.setEdge('b', 'c', { cutvalue: 1 });
-      expect(leaveEdge(tree)).to.be.undefined;
+      expect(leaveEdge(tree)).toBeUndefined();
     });
 
     it('returns an edge if one is found with a negative cutvalue', function () {
@@ -181,7 +184,7 @@ describe('network simplex', function () {
 
       const f = enterEdge(t, g, { v: 'g', w: 'h' });
       expect(undirectedEdge(f).v).toBe('a');
-      expect(['e', 'f']).to.include(undirectedEdge(f).w);
+      expect(['e', 'f']).toContain(undirectedEdge(f).w);
     });
 
     it('finds an appropriate edge for gansner graph #2', function () {
@@ -192,7 +195,7 @@ describe('network simplex', function () {
 
       const f = enterEdge(t, g, { v: 'g', w: 'h' });
       expect(undirectedEdge(f).v).toBe('a');
-      expect(['e', 'f']).to.include(undirectedEdge(f).w);
+      expect(['e', 'f']).toContain(undirectedEdge(f).w);
     });
 
     it('finds an appropriate edge for gansner graph #3', function () {
@@ -203,7 +206,7 @@ describe('network simplex', function () {
 
       const f = enterEdge(t, g, { v: 'h', w: 'g' });
       expect(undirectedEdge(f).v).toBe('a');
-      expect(['e', 'f']).to.include(undirectedEdge(f).w);
+      expect(['e', 'f']).toContain(undirectedEdge(f).w);
     });
 
     it('finds an appropriate edge for gansner graph #4', function () {
@@ -214,7 +217,7 @@ describe('network simplex', function () {
 
       const f = enterEdge(t, g, { v: 'h', w: 'g' });
       expect(undirectedEdge(f).v).toBe('a');
-      expect(['e', 'f']).to.include(undirectedEdge(f).w);
+      expect(['e', 'f']).toContain(undirectedEdge(f).w);
     });
   });
 
@@ -236,28 +239,29 @@ describe('network simplex', function () {
       const e = g.node('e');
 
       expect(
-        _.sortBy(
-          _.map(g.nodes(), function (v) {
+        g
+          .nodes()
+          .map(v => {
             return g.node(v).lim;
-          }),
-        ),
-      ).toEqual(_.range(1, 6));
+          })
+          .sort(),
+      ).toEqual([1, 2, 3, 4, 5]);
 
       expect(a).toEqual({ low: 1, lim: 5 });
 
       expect(b.parent).toBe('a');
-      expect(b.lim).to.be.lt(a.lim);
+      expect(b.lim).toBeLessThan(a.lim);
 
       expect(c.parent).toBe('a');
-      expect(c.lim).to.be.lt(a.lim);
-      expect(c.lim).to.not.equal(b.lim);
+      expect(c.lim).toBeLessThan(a.lim);
+      expect(c.lim).not.toBe(b.lim);
 
       expect(d.parent).toBe('c');
-      expect(d.lim).to.be.lt(c.lim);
+      expect(d.lim).toBeLessThan(c.lim);
 
       expect(e.parent).toBe('c');
-      expect(e.lim).to.be.lt(c.lim);
-      expect(e.lim).to.not.equal(d.lim);
+      expect(e.lim).toBeLessThan(c.lim);
+      expect(e.lim).not.toBe(d.lim);
     });
   });
 
@@ -280,12 +284,13 @@ describe('network simplex', function () {
       expect(t.edge('g', 'f').cutvalue).toBe(0);
 
       // ensure lim numbers look right
-      const lims = _.sortBy(
-        _.map(t.nodes(), function (v) {
+      const lims = t
+        .nodes()
+        .map((v: any) => {
           return t.node(v).lim;
-        }),
-      );
-      expect(lims).toEqual(_.range(1, 9));
+        })
+        .sort();
+      expect(lims).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
     });
 
     it('updates ranks', function () {
@@ -454,11 +459,11 @@ describe('network simplex', function () {
   });
 });
 
-function ns(g) {
+function ns(g: Graph) {
   networkSimplex(g);
   normalizeRanks(g);
 }
 
-function undirectedEdge(e) {
+function undirectedEdge(e: any) {
   return e.v < e.w ? { v: e.v, w: e.w } : { v: e.w, w: e.v };
 }

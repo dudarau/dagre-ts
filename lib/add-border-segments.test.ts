@@ -1,9 +1,8 @@
-const expect from "../test/chai").expect;
-const addBorderSegments from "./add-border-segments");
+import addBorderSegments from "./add-border-segments";
 import { Graph } from 'graphlib';
 
 describe("addBorderSegments", function() {
-  const g;
+  let g: Graph;
 
   beforeEach(function() {
     g = new Graph({ compound: true });
@@ -67,8 +66,8 @@ describe("addBorderSegments", function() {
       rank: 2, width: 0, height: 0 });
     expect(g.parent(br1)).toBe("sg");
 
-    expect(g.hasEdge(sgNode.borderLeft[1], sgNode.borderLeft[2])).to.be.true;
-    expect(g.hasEdge(sgNode.borderRight[1], sgNode.borderRight[2])).to.be.true;
+    expect(g.hasEdge(sgNode.borderLeft[1], sgNode.borderLeft[2])).toBeTruthy();
+    expect(g.hasEdge(sgNode.borderRight[1], sgNode.borderRight[2])).toBeTruthy();
   });
 
   it("adds borders for nested subgraphs", function() {

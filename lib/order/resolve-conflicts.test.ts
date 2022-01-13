@@ -111,7 +111,7 @@ describe('order/resolveConflicts', function () {
     cg.setEdge('b', 'c');
     cg.setEdge('c', 'd');
     const results = resolveConflicts(input, cg);
-    expect(results).toBe(1);
+    expect(results.length).toBe(1);
     expect(results[0].vs.indexOf('c')).toBeGreaterThan(results[0].vs.indexOf('a'));
     expect(results[0].vs.indexOf('c')).toBeGreaterThan(results[0].vs.indexOf('b'));
     expect(results[0].vs.indexOf('d')).toBeGreaterThan(results[0].vs.indexOf('c'));

@@ -1,9 +1,8 @@
 import { Graph } from 'graphlib';
-const coordinateSystem from "./coordinate-system");
-const expect from "../test/chai").expect;
+import coordinateSystem from "./coordinate-system";
 
 describe("coordinateSystem", function() {
-  const g;
+  let g: Graph;
 
   beforeEach(function() {
     g = new Graph();
