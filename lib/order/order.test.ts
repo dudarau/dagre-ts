@@ -22,7 +22,7 @@ describe('order', function () {
     g.setEdge('b', 'd');
     g.setPath(['a', 'e', 'f']);
     order(g);
-    var layering = util.buildLayerMatrix(g);
+    const layering = util.buildLayerMatrix(g);
     expect(crossCount(g, layering)).toBe(0);
   });
 
@@ -38,7 +38,7 @@ describe('order', function () {
       g.setNode(v, { rank: 3 });
     });
     order(g);
-    var layering = util.buildLayerMatrix(g);
+    const layering = util.buildLayerMatrix(g);
     expect(crossCount(g, layering)).toBe(0);
   });
 
@@ -52,7 +52,7 @@ describe('order', function () {
     });
     g.setNode('d', { rank: 4 });
     order(g);
-    var layering = util.buildLayerMatrix(g);
+    const layering = util.buildLayerMatrix(g);
     expect(crossCount(g, layering)).toBeLessThan(1);
   });
 });
