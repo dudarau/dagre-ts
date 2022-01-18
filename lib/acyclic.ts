@@ -50,11 +50,11 @@ function dfsFAS(g: Graph) {
 
 function undo(g: Graph) {
   g.edges().forEach((e) => {
-    var label = g.edge(e);
+    const label = g.edge(e);
     if (label.reversed) {
       g.removeEdge(e);
 
-      var forwardName = label.forwardName;
+      const forwardName = label.forwardName;
       delete label.reversed;
       delete label.forwardName;
       g.setEdge(e.w, e.v, label, forwardName);
