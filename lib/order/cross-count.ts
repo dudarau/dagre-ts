@@ -1,9 +1,5 @@
-"use strict";
-
-var _ = require("../lodash");
-
-module.exports = crossCount;
-
+import { Edge, Graph } from 'graphlib';
+import lodash from '../lodash';
 /*
  * A function that takes a layering (an array of layers, each with an array of
  * ordererd nodes) and a graph and returns a weighted crossing count.
@@ -20,39 +16,52 @@ module.exports = crossCount;
  *
  * This algorithm is derived from Barth, et al., "Bilayer Cross Counting."
  */
-function crossCount(g, layering) {
-  var cc = 0;
-  for (var i = 1; i < layering.length; ++i) {
-    cc += twoLayerCrossCount(g, layering[i-1], layering[i]);
+export default function crossCount(g: Graph, layering: any) {
+  let cc = 0;
+  for (let i = 1; i < layering.length; ++i) {
+    cc += twoLayerCrossCount(g, layering[i - 1], layering[i]);
   }
   return cc;
 }
 
-function twoLayerCrossCount(g, northLayer, southLayer) {
+function twoLayerCrossCount(g: Graph, northLayer: any, southLayer: any) {
   // Sort all of the edges between the north and south layers by their position
   // in the north layer and then the south. Map these edges to the position of
   // their head in the south layer.
-  var southPos = _.zipObject(southLayer,
-    _.map(southLayer, function (v, i) { return i; }));
-  var southEntries = _.flatten(_.map(northLayer, function(v) {
-    return _.sortBy(_.map(g.outEdges(v), function(e) {
-      return { pos: southPos[e.w], weight: g.edge(e).weight };
-    }), "pos");
-  }), true);
+  const southPos = lodash.zipObject(
+    southLayer,
+    southLayer.map((v: any, i: number) => {
+      return i;
+    }),
+  );
+  const southEntries = lodash.flatten(
+    northLayer.map((v: any) => {
+      return lodash.sortBy(
+        (g.outEdges(v) as Edge[]).map((e: any) => {
+          return { pos: southPos[e.w], weight: g.edge(e).weight };
+        }),
+        'pos',
+      );
+    }),
+    true,
+  );
 
   // Build the accumulator tree
-  var firstIndex = 1;
+  let firstIndex = 1;
   while (firstIndex < southLayer.length) firstIndex <<= 1;
-  var treeSize = 2 * firstIndex - 1;
+  const treeSize = 2 * firstIndex - 1;
   firstIndex -= 1;
-  var tree = _.map(new Array(treeSize), function() { return 0; });
+  const tree = Array.apply(null, Array(treeSize)).map(() => {
+    return 0;
+  });
 
   // Calculate the weighted crossings
-  var cc = 0;
-  _.forEach(southEntries.forEach(function(entry) {
-    var index = entry.pos + firstIndex;
+  let cc = 0;
+
+  southEntries.forEach((entry: any) => {
+    let index = entry.pos + firstIndex;
     tree[index] += entry.weight;
-    var weightSum = 0;
+    let weightSum = 0;
     while (index > 0) {
       if (index % 2) {
         weightSum += tree[index + 1];
@@ -61,7 +70,7 @@ function twoLayerCrossCount(g, northLayer, southLayer) {
       tree[index] += entry.weight;
     }
     cc += entry.weight * weightSum;
-  }));
+  });
 
   return cc;
 }

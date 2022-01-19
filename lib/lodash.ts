@@ -10,6 +10,7 @@ if (typeof require === 'function') {
       constant: require('lodash/constant'),
       defaults: require('lodash/defaults'),
       each: require('lodash/each'),
+      filter: require('lodash/filter'),
       flatten: require('lodash/flatten'),
       forEach: require('lodash/forEach'),
       forIn: require('lodash/forIn'),
@@ -29,11 +30,6 @@ if (typeof require === 'function') {
   } catch (e) {
     // continue regardless of error
   }
-}
-
-if (!lodash) {
-  // @ts-ignore
-  lodash = window._;
 }
 
 export default lodash;

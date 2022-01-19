@@ -1,15 +1,13 @@
-var _ = require("../lodash");
+import {Graph} from "graphlib";
 
-module.exports = addSubgraphConstraints;
+export default function addSubgraphConstraints(g: Graph, cg: any, vs: any) {
+  const prev = {} as any;
+  let rootPrev :any;
 
-function addSubgraphConstraints(g, cg, vs) {
-  var prev = {},
-    rootPrev;
-
-  _.forEach(vs, function(v) {
-    var child = g.parent(v),
-      parent,
-      prevChild;
+  vs.forEach((v: any) => {
+    let child = g.parent(v);
+    let parent;
+    let prevChild;
     while (child) {
       parent = g.parent(child);
       if (parent) {
@@ -29,12 +27,12 @@ function addSubgraphConstraints(g, cg, vs) {
 
   /*
   function dfs(v) {
-    var children = v ? g.children(v) : g.children();
+    const children = v ? g.children(v) : g.children();
     if (children.length) {
-      var min = Number.POSITIVE_INFINITY,
+      const min = Number.POSITIVE_INFINITY,
           subgraphs = [];
       _.each(children, function(child) {
-        var childMin = dfs(child);
+        const childMin = dfs(child);
         if (g.children(child).length) {
           subgraphs.push({ v: child, order: childMin });
         }

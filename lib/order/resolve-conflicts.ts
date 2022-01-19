@@ -1,9 +1,3 @@
-"use strict";
-
-var _ = require("../lodash");
-
-module.exports = resolveConflicts;
-
 /*
  * Given a list of entries of the form {v, barycenter, weight} and a
  * constraint graph this function will resolve any conflicts between the
@@ -29,57 +23,62 @@ module.exports = resolveConflicts;
  *    graph. The property `i` is the lowest original index of any of the
  *    elements in `vs`.
  */
-function resolveConflicts(entries, cg) {
-  var mappedEntries = {};
-  _.forEach(entries, function(entry, i) {
-    var tmp = mappedEntries[entry.v] = {
+import { Edge } from 'graphlib';
+import lodash from "../lodash";
+
+export default function resolveConflicts(entries: any, cg: any) {
+  const mappedEntries = {} as any;
+  entries?.forEach((entry: any, i: number) => {
+    const tmp = (mappedEntries[entry.v] = {
       indegree: 0,
-      "in": [],
+      in: [],
       out: [],
       vs: [entry.v],
-      i: i
-    };
-    if (!_.isUndefined(entry.barycenter)) {
+      i: i,
+    } as any);
+    if (!entry.barycenter !== undefined) {
       tmp.barycenter = entry.barycenter;
       tmp.weight = entry.weight;
     }
   });
 
-  _.forEach(cg.edges(), function(e) {
-    var entryV = mappedEntries[e.v];
-    var entryW = mappedEntries[e.w];
-    if (!_.isUndefined(entryV) && !_.isUndefined(entryW)) {
+  cg.edges().forEach((e: Edge) => {
+    const entryV = mappedEntries[e.v];
+    const entryW = mappedEntries[e.w];
+    if (entryV !== undefined && entryW !== undefined) {
       entryW.indegree++;
       entryV.out.push(mappedEntries[e.w]);
     }
   });
 
-  var sourceSet = _.filter(mappedEntries, function(entry) {
+  const sourceSet = lodash.filter(mappedEntries, function(entry: any) {
     return !entry.indegree;
   });
 
   return doResolveConflicts(sourceSet);
 }
 
-function doResolveConflicts(sourceSet) {
-  var entries = [];
+function doResolveConflicts(sourceSet : any) {
+  const entries = [];
 
-  function handleIn(vEntry) {
-    return function(uEntry) {
+  function handleIn(vEntry: any) {
+    return function (uEntry: any) {
       if (uEntry.merged) {
         return;
       }
-      if (_.isUndefined(uEntry.barycenter) ||
-          _.isUndefined(vEntry.barycenter) ||
-          uEntry.barycenter >= vEntry.barycenter) {
+      if (
+        typeof uEntry.barycenter === 'undefined' ||
+        typeof vEntry.barycenter === 'undefined' ||
+        uEntry.barycenter >= vEntry.barycenter
+      ) {
         mergeEntries(vEntry, uEntry);
       }
     };
   }
 
-  function handleOut(vEntry) {
-    return function(wEntry) {
-      wEntry["in"].push(vEntry);
+  function handleOut(vEntry: any) {
+    return function (wEntry: any) {
+      wEntry['in'].push(vEntry);
       if (--wEntry.indegree === 0) {
         sourceSet.push(wEntry);
       }
@@ -87,22 +86,22 @@ function doResolveConflicts(sourceSet) {
   }
 
   while (sourceSet.length) {
-    var entry = sourceSet.pop();
+    const entry = sourceSet.pop();
     entries.push(entry);
-    _.forEach(entry["in"].reverse(), handleIn(entry));
-    _.forEach(entry.out, handleOut(entry));
+    entry['in'].reverse().forEach(handleIn(entry));
+    entry.out.forEach(handleOut(entry));
   }
 
-  return _.map(_.filter(entries, function(entry) { return !entry.merged; }),
-    function(entry) {
-      return _.pick(entry, ["vs", "i", "barycenter", "weight"]);
+  return entries.filter((entry) =>{
+      return !entry.merged;
+    }).map((entry) => {
+      return lodash.pick(entry, ['vs', 'i', 'barycenter', 'weight']);
     });
-
 }
 
-function mergeEntries(target, source) {
-  var sum = 0;
-  var weight = 0;
+function mergeEntries(target: any, source: any) {
+  let sum = 0;
+  let weight = 0;
 
   if (target.weight) {
     sum += target.barycenter * target.weight;

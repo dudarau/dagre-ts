@@ -1,7 +1,7 @@
 import { Graph } from 'graphlib';
 import order from './index';
 import crossCount from './cross-count';
-import util from '../util';
+import * as util from '../util';
 
 describe('order', function () {
   let g: Graph;

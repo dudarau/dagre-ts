@@ -15,9 +15,10 @@ describe('order/buildLayerGraph', function () {
     g.setNode('d', { rank: 3 });
 
     const lg = buildLayerGraph(g, 1, 'inEdges');
-    expect(lg.hasNode(lg.graph().root));
-    expect(lg.children()).toEqual([lg.graph().root]);
-    expect(lg.children(lg.graph().root)).toEqual(['a', 'b']);
+    const lgGraph = lg.graph() as any;
+    expect(lg.hasNode(lgGraph.root));
+    expect(lg.children()).toEqual([lgGraph.root]);
+    expect(lg.children(lgGraph.root)).toEqual(['a', 'b']);
   });
 
   it('copies flat nodes from the layer to the graph', function () {
@@ -108,7 +109,7 @@ describe('order/buildLayerGraph', function () {
     });
 
     const lg = buildLayerGraph(g, 0, 'inEdges');
-    const root = lg.graph().root;
+    const root = (lg.graph() as any).root;
     expect(lg.children(root).sort()).toEqual(['c', 'sg']);
     expect(lg.parent('a')).toBe('sg');
     expect(lg.parent('b')).toBe('sg');
