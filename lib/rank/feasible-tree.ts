@@ -1,10 +1,6 @@
-"use strict";
-
-var _ = require("../lodash");
-var Graph = require("../graphlib").Graph;
-var slack = require("./util").slack;
-
-module.exports = feasibleTree;
+import {Edge, Graph} from 'graphlib';
+import { slack } from './util';
+import lodash from "../lodash";
 
 /*
  * Constructs a spanning tree with tight edges and adjusted the input node's
@@ -31,15 +27,16 @@ module.exports = feasibleTree;
  * Returns a tree (undirected graph) that is constructed using only "tight"
  * edges.
  */
-function feasibleTree(g) {
-  var t = new Graph({ directed: false });
+export function feasibleTree(g: Graph) {
+  const t = new Graph({ directed: false });
 
   // Choose arbitrary node from which to start our tree
-  var start = g.nodes()[0];
-  var size = g.nodeCount();
+  const start = g.nodes()[0];
+  const size = g.nodeCount();
   t.setNode(start, {});
 
-  var edge, delta;
+  let edge;
+  let delta;
   while (tightTree(t, g) < size) {
     edge = findMinSlackEdge(t, g);
     delta = t.hasNode(edge.v) ? slack(g, edge) : -slack(g, edge);
@@ -53,11 +50,11 @@ function feasibleTree(g) {
  * Finds a maximal tree of tight edges and returns the number of nodes in the
  * tree.
  */
-function tightTree(t, g) {
-  function dfs(v) {
-    _.forEach(g.nodeEdges(v), function(e) {
-      var edgeV = e.v,
-        w = (v === edgeV) ? e.w : edgeV;
+function tightTree(t: any, g: Graph) {
+  function dfs(v: any) {
+    (g.nodeEdges(v) as Edge[]).forEach((e) => {
+      const edgeV = e.v,
+        w = v === edgeV ? e.w : edgeV;
       if (!t.hasNode(w) && !slack(g, e)) {
         t.setNode(w, {});
         t.setEdge(v, w, {});
@@ -66,7 +63,7 @@ function tightTree(t, g) {
     });
   }
 
-  _.forEach(t.nodes(), dfs);
+  t.nodes().forEach(dfs);
   return t.nodeCount();
 }
 
@@ -74,16 +71,16 @@ function tightTree(t, g) {
  * Finds the edge with the smallest slack that is incident on tree and returns
  * it.
  */
-function findMinSlackEdge(t, g) {
-  return _.minBy(g.edges(), function(e) {
+function findMinSlackEdge(t: any, g: Graph) {
+  return lodash.minBy(g.edges(), function (e: any) {
     if (t.hasNode(e.v) !== t.hasNode(e.w)) {
       return slack(g, e);
     }
   });
 }
 
-function shiftRanks(t, g, delta) {
-  _.forEach(t.nodes(), function(v) {
+function shiftRanks(t: any, g: Graph, delta: any) {
+  t.nodes().forEach((v: any) => {
     g.node(v).rank += delta;
   });
 }

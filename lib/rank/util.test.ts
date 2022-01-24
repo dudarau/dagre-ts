@@ -1,7 +1,7 @@
 
 import { Graph } from 'graphlib';
 import { normalizeRanks } from "../util";
-import rankUtil from "./util";
+import * as rankUtil from "./util";
 const longestPath = rankUtil.longestPath;
 
 describe("rank/util", function() {

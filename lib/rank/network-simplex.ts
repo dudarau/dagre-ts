@@ -1,14 +1,9 @@
-"use strict";
-
-var _ = require("../lodash");
-var feasibleTree = require("./feasible-tree");
-var slack = require("./util").slack;
-var initRank = require("./util").longestPath;
-var preorder = require("../graphlib").alg.preorder;
-var postorder = require("../graphlib").alg.postorder;
-var simplify = require("../util").simplify;
-
-module.exports = networkSimplex;
+import { feasibleTree } from './feasible-tree';
+import { slack } from './util';
+import { longestPath as initRank } from './util';
+import {alg, Edge, Graph} from 'graphlib';
+import { simplify } from '../util';
+import lodash from "../lodash";
 
 // Expose some internals for testing purposes
 networkSimplex.initLowLimValues = initLowLimValues;
@@ -51,14 +46,15 @@ networkSimplex.exchangeEdges = exchangeEdges;
  * for Drawing Directed Graphs." The structure of the file roughly follows the
  * structure of the overall algorithm.
  */
-function networkSimplex(g) {
+export default function networkSimplex(g: Graph) {
   g = simplify(g);
   initRank(g);
-  var t = feasibleTree(g);
+  const t = feasibleTree(g);
   initLowLimValues(t);
   initCutValues(t, g);
 
-  var e, f;
+  let e;
+  let f;
   while ((e = leaveEdge(t))) {
     f = enterEdge(t, g, e);
     exchangeEdges(t, g, e, f);
@@ -68,17 +64,17 @@ function networkSimplex(g) {
 /*
  * Initializes cut values for all edges in the tree.
  */
-function initCutValues(t, g) {
-  var vs = postorder(t, t.nodes());
+function initCutValues(t: any, g: Graph) {
+  let vs = alg.postorder(t, t.nodes());
   vs = vs.slice(0, vs.length - 1);
-  _.forEach(vs, function(v) {
+  vs.forEach((v) => {
     assignCutValue(t, g, v);
   });
 }
 
-function assignCutValue(t, g, child) {
-  var childLab = t.node(child);
-  var parent = childLab.parent;
+function assignCutValue(t: any, g: Graph, child: any) {
+  const childLab = t.node(child);
+  const parent = childLab.parent;
   t.edge(child, parent).cutvalue = calcCutValue(t, g, child);
 }
 
@@ -86,15 +82,15 @@ function assignCutValue(t, g, child) {
  * Given the tight tree, its graph, and a child in the graph calculate and
  * return the cut value for the edge between the child and its parent.
  */
-function calcCutValue(t, g, child) {
-  var childLab = t.node(child);
-  var parent = childLab.parent;
+function calcCutValue(t: any, g: Graph, child: any) {
+  const childLab = t.node(child);
+  const parent = childLab.parent;
   // True if the child is on the tail end of the edge in the directed graph
-  var childIsTail = true;
+  let childIsTail = true;
   // The graph's view of the tree edge we're inspecting
-  var graphEdge = g.edge(child, parent);
+  let graphEdge = g.edge(child, parent);
   // The accumulated cut value for the edge between this node and its parent
-  var cutValue = 0;
+  let cutValue = 0;
 
   if (!graphEdge) {
     childIsTail = false;
@@ -103,17 +99,17 @@ function calcCutValue(t, g, child) {
 
   cutValue = graphEdge.weight;
 
-  _.forEach(g.nodeEdges(child), function(e) {
-    var isOutEdge = e.v === child,
+  (g.nodeEdges(child) as Edge[]).forEach((e) => {
+    const isOutEdge = e.v === child,
       other = isOutEdge ? e.w : e.v;
 
     if (other !== parent) {
-      var pointsToHead = isOutEdge === childIsTail,
+      const pointsToHead = isOutEdge === childIsTail,
         otherWeight = g.edge(e).weight;
 
       cutValue += pointsToHead ? otherWeight : -otherWeight;
       if (isTreeEdge(t, child, other)) {
-        var otherCutValue = t.edge(child, other).cutvalue;
+        const otherCutValue = t.edge(child, other).cutvalue;
         cutValue += pointsToHead ? -otherCutValue : otherCutValue;
       }
     }
@@ -122,20 +118,20 @@ function calcCutValue(t, g, child) {
   return cutValue;
 }
 
-function initLowLimValues(tree, root) {
+function initLowLimValues(tree: any, root?: any) {
   if (arguments.length < 2) {
     root = tree.nodes()[0];
   }
   dfsAssignLowLim(tree, {}, 1, root);
 }
 
-function dfsAssignLowLim(tree, visited, nextLim, v, parent) {
-  var low = nextLim;
-  var label = tree.node(v);
+function dfsAssignLowLim(tree:any, visited: any, nextLim: any, v: any, parent?: any) {
+  const low = nextLim;
+  const label = tree.node(v);
 
   visited[v] = true;
-  _.forEach(tree.neighbors(v), function(w) {
-    if (!_.has(visited, w)) {
+  tree.neighbors(v).forEach((w: any) => {
+    if (!lodash.has(visited, w)) {
       nextLim = dfsAssignLowLim(tree, visited, nextLim, w, v);
     }
   });
@@ -152,15 +148,15 @@ function dfsAssignLowLim(tree, visited, nextLim, v, parent) {
   return nextLim;
 }
 
-function leaveEdge(tree) {
-  return _.find(tree.edges(), function(e) {
+function leaveEdge(tree: any) {
+  return lodash.find(tree.edges(), function (e: Edge) {
     return tree.edge(e).cutvalue < 0;
   });
 }
 
-function enterEdge(t, g, edge) {
-  var v = edge.v;
-  var w = edge.w;
+function enterEdge(t: any, g: Graph, edge: Edge) {
+  let v = edge.v;
+  let w = edge.w;
 
   // For the rest of this function we assume that v is the tail and w is the
   // head, so if we don't have this edge in the graph we should flip it to
@@ -170,10 +166,10 @@ function enterEdge(t, g, edge) {
     w = edge.v;
   }
 
-  var vLabel = t.node(v);
-  var wLabel = t.node(w);
-  var tailLabel = vLabel;
-  var flip = false;
+  const vLabel = t.node(v);
+  const wLabel = t.node(w);
+  let tailLabel = vLabel;
+  let flip = false;
 
   // If the root is in the tail of the edge then we need to flip the logic that
   // checks for the head and tail nodes in the candidates function below.
@@ -182,17 +178,21 @@ function enterEdge(t, g, edge) {
     flip = true;
   }
 
-  var candidates = _.filter(g.edges(), function(edge) {
-    return flip === isDescendant(t, t.node(edge.v), tailLabel) &&
-           flip !== isDescendant(t, t.node(edge.w), tailLabel);
+  const candidates = lodash.filter(g.edges(), function (edge: Edge) {
+    return (
+      flip === isDescendant(t, t.node(edge.v), tailLabel) &&
+      flip !== isDescendant(t, t.node(edge.w), tailLabel)
+    );
   });
 
-  return _.minBy(candidates, function(edge) { return slack(g, edge); });
+  return lodash.minBy(candidates, function (edge: Edge) {
+    return slack(g, edge);
+  });
 }
 
-function exchangeEdges(t, g, e, f) {
-  var v = e.v;
-  var w = e.w;
+function exchangeEdges(t: any, g: Graph, e: any, f: any) {
+  const v = e.v;
+  const w = e.w;
   t.removeEdge(v, w);
   t.setEdge(f.v, f.w, {});
   initLowLimValues(t);
@@ -200,14 +200,16 @@ function exchangeEdges(t, g, e, f) {
   updateRanks(t, g);
 }
 
-function updateRanks(t, g) {
-  var root = _.find(t.nodes(), function(v) { return !g.node(v).parent; });
-  var vs = preorder(t, root);
+function updateRanks(t: any, g: Graph) {
+  const root = lodash.find(t.nodes(), function (v: any) {
+    return !g.node(v).parent;
+  });
+  let vs = alg.preorder(t, root);
   vs = vs.slice(1);
-  _.forEach(vs, function(v) {
-    var parent = t.node(v).parent,
-      edge = g.edge(v, parent),
-      flipped = false;
+  vs.forEach((v) => {
+    const parent = t.node(v).parent;
+    let edge = g.edge(v, parent);
+    let flipped = false;
 
     if (!edge) {
       edge = g.edge(parent, v);
@@ -221,7 +223,7 @@ function updateRanks(t, g) {
 /*
  * Returns true if the edge is in the tree.
  */
-function isTreeEdge(tree, u, v) {
+function isTreeEdge(tree: any, u: any, v: any) {
   return tree.hasEdge(u, v);
 }
 
@@ -229,6 +231,6 @@ function isTreeEdge(tree, u, v) {
  * Returns true if the specified node is descendant of the root node per the
  * assigned low and lim attributes in the tree.
  */
-function isDescendant(tree, vLabel, rootLabel) {
+function isDescendant(tree: any, vLabel: any, rootLabel: any) {
   return rootLabel.low <= vLabel.lim && vLabel.lim <= rootLabel.lim;
 }

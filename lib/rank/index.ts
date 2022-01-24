@@ -1,11 +1,8 @@
-"use strict";
-
-var rankUtil = require("./util");
-var longestPath = rankUtil.longestPath;
-var feasibleTree = require("./feasible-tree");
-var networkSimplex = require("./network-simplex");
-
-module.exports = rank;
+import * as rankUtil from './util';
+const longestPath = rankUtil.longestPath;
+import { feasibleTree } from './feasible-tree';
+import networkSimplex from './network-simplex';
+import { Graph } from 'graphlib';
 
 /*
  * Assigns a rank to each node in the input graph that respects the "minlen"
@@ -26,23 +23,30 @@ module.exports = rank;
  *       algorithm. Ranks can start at any index (including negative), we'll
  *       fix them up later.
  */
-function rank(g) {
-  switch(g.graph().ranker) {
-  case "network-simplex": networkSimplexRanker(g); break;
-  case "tight-tree": tightTreeRanker(g); break;
-  case "longest-path": longestPathRanker(g); break;
-  default: networkSimplexRanker(g);
+export function rank(g: Graph) {
+  switch ((g.graph() as any).ranker) {
+    case 'network-simplex':
+      networkSimplexRanker(g);
+      break;
+    case 'tight-tree':
+      tightTreeRanker(g);
+      break;
+    case 'longest-path':
+      longestPathRanker(g);
+      break;
+    default:
+      networkSimplexRanker(g);
   }
 }
 
 // A fast and simple ranker, but results are far from optimal.
-var longestPathRanker = longestPath;
+const longestPathRanker = longestPath;
 
-function tightTreeRanker(g) {
+function tightTreeRanker(g: Graph) {
   longestPath(g);
   feasibleTree(g);
 }
 
-function networkSimplexRanker(g) {
+function networkSimplexRanker(g: Graph) {
   networkSimplex(g);
 }

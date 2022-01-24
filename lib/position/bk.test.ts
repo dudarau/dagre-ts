@@ -1,5 +1,5 @@
 import { buildLayerMatrix } from '../util';
-import bk from './bk';
+import * as bk from './bk';
 const findType1Conflicts = bk.findType1Conflicts;
 const findType2Conflicts = bk.findType2Conflicts;
 const addConflict = bk.addConflict;
