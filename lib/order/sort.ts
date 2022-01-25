@@ -1,7 +1,7 @@
 import * as util from '../util';
 import lodash from '../lodash';
 
-export default function sort(entries: any, biasRight: any) {
+export default function sort(entries: any, biasRight?: any) {
   const parts = util.partition(entries, function (entry: any) {
     return lodash.has(entry, 'barycenter');
   });

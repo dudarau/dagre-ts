@@ -1,11 +1,11 @@
 import acyclic from './acyclic';
-import normalize from './normalize';
-import rank from './rank';
+import * as normalize from './normalize';
+import { rank } from './rank';
 import { normalizeRanks, removeEmptyRanks } from './util';
-import parentDummyChains from './parent-dummy-chains';
-import nestingGraph from './nesting-graph';
-import addBorderSegments from './add-border-segments';
-import coordinateSystem from './coordinate-system';
+import { parentDummyChains } from './parent-dummy-chains';
+import * as nestingGraph from './nesting-graph';
+import { addBorderSegments } from './add-border-segments';
+import * as coordinateSystem from './coordinate-system';
 import order from './order';
 import position from './position';
 import * as util from './util';
@@ -472,7 +472,7 @@ function positionSelfEdges(g: Graph) {
 }
 
 const mapValues = (obj: any, iterator: (arg: any) => any) =>
-  Object.entries(obj).reduce((acc, [key, value] : [string, any]) => {
+  Object.entries(obj).reduce((acc, [key, value]: [string, any]) => {
     acc[key] = iterator ? iterator(value.number) : value.number;
     return acc;
   }, {} as any);

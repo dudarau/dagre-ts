@@ -1,5 +1,5 @@
 import { Graph } from 'graphlib';
-import parentDummyChains from './parent-dummy-chains';
+import { parentDummyChains } from './parent-dummy-chains';
 
 describe('parentDummyChains', function () {
   let g: Graph;

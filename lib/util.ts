@@ -184,7 +184,7 @@ export function removeEmptyRanks(g: Graph) {
   });
 }
 
-export function addBorderNode(g: Graph, prefix: any, rank: any, order: any) {
+export function addBorderNode(g: Graph, prefix: any, rank?: any, order?: any) {
   const node = {
     width: 0,
     height: 0,

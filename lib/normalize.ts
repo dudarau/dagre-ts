@@ -1,7 +1,5 @@
-"use strict";
-
-var _ = require("./lodash");
-var util = require("./util");
+import * as util from "./util";
+import {Edge, Graph} from "graphlib";
 
 module.exports = {
   run: run,
@@ -24,25 +22,25 @@ module.exports = {
  *    3. The graph is augmented with a "dummyChains" attribute which contains
  *       the first dummy in each chain of dummy nodes produced.
  */
-function run(g) {
-  g.graph().dummyChains = [];
-  _.forEach(g.edges(), function(edge) { normalizeEdge(g, edge); });
+export function run(g: Graph) {
+  (g.graph() as any).dummyChains = [];
+  g.edges().forEach((edge) => { normalizeEdge(g, edge); });
 }
 
-function normalizeEdge(g, e) {
-  var v = e.v;
-  var vRank = g.node(v).rank;
-  var w = e.w;
-  var wRank = g.node(w).rank;
-  var name = e.name;
-  var edgeLabel = g.edge(e);
-  var labelRank = edgeLabel.labelRank;
+function normalizeEdge(g: Graph, e: Edge) {
+  let v = e.v;
+  let vRank = g.node(v).rank;
+  const w = e.w;
+  const wRank = g.node(w).rank;
+  const name = e.name;
+  const edgeLabel = g.edge(e);
+  const labelRank = edgeLabel.labelRank;
 
   if (wRank === vRank + 1) return;
 
   g.removeEdge(e);
 
-  var dummy, attrs, i;
+  let dummy, attrs: any, i;
   for (i = 0, ++vRank; vRank < wRank; ++i, ++vRank) {
     edgeLabel.points = [];
     attrs = {
@@ -59,7 +57,7 @@ function normalizeEdge(g, e) {
     }
     g.setEdge(v, dummy, { weight: edgeLabel.weight }, name);
     if (i === 0) {
-      g.graph().dummyChains.push(dummy);
+      (g.graph() as any).dummyChains.push(dummy);
     }
     v = dummy;
   }
@@ -67,14 +65,14 @@ function normalizeEdge(g, e) {
   g.setEdge(v, w, { weight: edgeLabel.weight }, name);
 }
 
-function undo(g) {
-  _.forEach(g.graph().dummyChains, function(v) {
-    var node = g.node(v);
-    var origLabel = node.edgeLabel;
-    var w;
+export function undo(g: Graph) {
+  (g.graph() as any).dummyChains.forEach((v :any) => {
+    let node = g.node(v);
+    const origLabel = node.edgeLabel;
+    let w;
     g.setEdge(node.edgeObj, origLabel);
     while (node.dummy) {
-      w = g.successors(v)[0];
+      w = (g.successors(v) as string[])[0];
       g.removeNode(v);
       origLabel.points.push({ x: node.x, y: node.y });
       if (node.dummy === "edge-label") {

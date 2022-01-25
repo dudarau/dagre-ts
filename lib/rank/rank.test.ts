@@ -1,4 +1,4 @@
-import rank from './index';
+import { rank } from './index';
 import { Edge } from 'graphlib';
 import { Graph } from 'graphlib';
 

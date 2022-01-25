@@ -1,4 +1,4 @@
-import normalize from './normalize';
+import * as normalize from './normalize';
 import { Edge, Graph } from 'graphlib';
 
 describe('normalize', function () {

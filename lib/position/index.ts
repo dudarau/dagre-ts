@@ -1,14 +1,13 @@
 import * as util from '../util';
 import { positionX } from './bk';
 import { Graph } from 'graphlib';
+import lodash from '../lodash';
 
-module.exports = position;
-
-function position(g: Graph) {
+export default function position(g: Graph) {
   g = util.asNonCompoundGraph(g);
 
   positionY(g);
-  positionX(g).forEach((x: any, v: any) => {
+  lodash.forEach(positionX(g), (x: any, v: any) => {
     g.node(v).x = x;
   });
 }
