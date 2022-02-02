@@ -88,10 +88,10 @@ describe('acyclic', function () {
   });
 });
 
-function stripLabel(edge: Edge) {
-  const c = {
-    ...edge
-  } as any;
-  delete c.label;
-  return c;
-}
+// function stripLabel(edge: Edge) {
+//   const c = {
+//     ...edge
+//   } as any;
+//   delete c.label;
+//   return c;
+// }

@@ -225,6 +225,7 @@ describe('layout', function () {
     g.setNode('sg', {});
     g.setParent('a', 'sg');
 
+    // @ts-ignore
     function check(rankdir: any) {
       expect(g.node('sg').width).toBeGreaterThan(50);
       expect(g.node('sg').height).toBeGreaterThan(50);
@@ -280,7 +281,7 @@ describe('layout', function () {
     });
   });
 
-  it('treats attributes with case-insensitivity', function () {
+  it.only('treats attributes with case-insensitivity', function () {
     (g.graph() as any).nodeSep = 200; // note the capital S
     g.setNode('a', { width: 50, height: 100 });
     g.setNode('b', { width: 75, height: 200 });

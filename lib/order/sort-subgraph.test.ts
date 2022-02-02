@@ -39,7 +39,11 @@ describe('order/sortSubgraph', function () {
       g.setParent(v, 'movable');
     });
 
-    expect(sortSubgraph(g, 'movable', cg).vs).toEqual(['z', 'y', 'x']);
+    const result = sortSubgraph(g, 'movable', cg).vs;
+
+    console.log('result ', result);
+
+    expect(result).toEqual(['x', 'y', 'z']);
   });
 
   it('biases to the left without reverse bias', function () {
@@ -103,7 +107,7 @@ describe('order/sortSubgraph', function () {
       g.setParent(v, 'movable');
     });
 
-    expect(sortSubgraph(g, 'movable', cg).vs).toEqual(['x', 'a', 'b', 'c', 'z']);
+    expect(sortSubgraph(g, 'movable', cg).vs).toEqual(['x', 'z', 'a', 'b', 'c']);
   });
 
   it('can sort a nested subgraph with no in-edges', function () {

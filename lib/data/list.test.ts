@@ -1,4 +1,4 @@
-import List from './list.js';
+import List from './list';
 
 describe('data.List dequeue', function () {
   let list: any;

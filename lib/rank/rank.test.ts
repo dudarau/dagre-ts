@@ -1,4 +1,4 @@
-import rank from './index';
+import { rank } from './index';
 import { Edge } from 'graphlib';
 import { Graph } from 'graphlib';
 
@@ -26,14 +26,14 @@ describe('rank', function () {
         (g.graph() as any).ranker = ranker;
         rank(g);
         g.edges().forEach((e: Edge) => {
-          var vRank = g.node(e.v).rank;
-          var wRank = g.node(e.w).rank;
+          const vRank = g.node(e.v).rank;
+          const wRank = g.node(e.w).rank;
           expect(wRank - vRank).toBeGreaterThanOrEqual(g.edge(e).minlen);
         });
       });
 
       it('can rank a single node graph', function () {
-        var g = new Graph().setGraph({}).setNode('a', {});
+        const g = new Graph().setGraph({}).setNode('a', {});
         rank(g);
         expect(g.node('a').rank).toBe(0);
       });

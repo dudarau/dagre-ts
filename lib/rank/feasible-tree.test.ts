@@ -1,5 +1,5 @@
 import { Graph } from 'graphlib';
-import feasibleTree from './feasible-tree';
+import { feasibleTree } from './feasible-tree';
 
 describe('feasibleTree', function () {
   it('creates a tree for a trivial input graph', function () {
@@ -26,8 +26,8 @@ describe('feasibleTree', function () {
     expect(g.node('b').rank).toEqual(g.node('a').rank + 1);
     expect(g.node('c').rank).toEqual(g.node('b').rank + 1);
     expect(g.node('d').rank).toEqual(g.node('a').rank + 1);
-    expect(tree.neighbors('a').sort()).toEqual(['b', 'd']);
-    expect(tree.neighbors('b').sort()).toEqual(['a', 'c']);
+    expect((tree.neighbors('a') as string[]).sort()).toEqual(['b', 'd']);
+    expect((tree.neighbors('b') as string[]).sort()).toEqual(['a', 'c']);
     expect(tree.neighbors('c')).toEqual(['b']);
     expect(tree.neighbors('d')).toEqual(['a']);
   });
@@ -43,8 +43,8 @@ describe('feasibleTree', function () {
     const tree = feasibleTree(g);
     expect(g.node('a').rank).toEqual(g.node('b').rank + 1);
     expect(g.node('c').rank).toEqual(g.node('b').rank + 1);
-    expect(tree.neighbors('a').sort()).toEqual(['b']);
-    expect(tree.neighbors('b').sort()).toEqual(['a', 'c']);
-    expect(tree.neighbors('c').sort()).toEqual(['b']);
+    expect((tree.neighbors('a') as string[]).sort()).toEqual(['b']);
+    expect((tree.neighbors('b') as string[]).sort()).toEqual(['a', 'c']);
+    expect((tree.neighbors('c') as string[]).sort()).toEqual(['b']);
   });
 });

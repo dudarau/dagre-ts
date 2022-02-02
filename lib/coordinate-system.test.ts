@@ -1,5 +1,5 @@
 import { Graph } from 'graphlib';
-import coordinateSystem from "./coordinate-system";
+import * as coordinateSystem from "./coordinate-system";
 
 describe("coordinateSystem", function() {
   let g: Graph;
