@@ -225,6 +225,7 @@ describe('layout', function () {
     g.setNode('sg', {});
     g.setParent('a', 'sg');
 
+    // @ts-ignore
     function check(rankdir: any) {
       expect(g.node('sg').width).toBeGreaterThan(50);
       expect(g.node('sg').height).toBeGreaterThan(50);

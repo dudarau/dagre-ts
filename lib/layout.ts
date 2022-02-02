@@ -491,7 +491,7 @@ function selectNumberAttrs(obj: any, attrs: any) {
 
 function canonicalize(attrs: any) {
   const newAttrs = {} as any;
-  Object.keys(attrs).forEach((v, k) => {
+  Object.keys(attrs).forEach((v) => {
     newAttrs[v.toLowerCase()] = v;
   });
   return newAttrs;

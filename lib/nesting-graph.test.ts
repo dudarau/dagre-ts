@@ -1,6 +1,6 @@
 import { Edge, Graph } from 'graphlib';
 import { alg } from 'graphlib';
-import nestingGraph from './nesting-graph';
+import * as nestingGraph from './nesting-graph';
 
 describe('rank/nestingGraph', function () {
   let g: Graph;

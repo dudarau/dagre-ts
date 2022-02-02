@@ -151,6 +151,7 @@ export function hasConflict(conflicts: any, v: any, w: any) {
  * we're trying to form a block with, we also ignore that possibility - our
  * blocks would be split in that scenario.
  */
+// @ts-ignore
 export function verticalAlignment(g: Graph, layering: any, conflicts: any, neighborFn: any) {
   const root = {} as any;
   const align = {} as any;
@@ -327,6 +328,7 @@ export function alignCoordinates(xss: any, alignTo: any) {
 }
 
 export function balance(xss: any, align?: any) {
+  // @ts-ignore
   return lodash.mapValues(xss.ul, function (ignore: any, v: any) {
     if (align) {
       return xss[align.toLowerCase()][v];

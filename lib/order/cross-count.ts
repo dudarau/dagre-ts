@@ -28,8 +28,10 @@ function twoLayerCrossCount(g: Graph, northLayer: any, southLayer: any) {
   // Sort all of the edges between the north and south layers by their position
   // in the north layer and then the south. Map these edges to the position of
   // their head in the south layer.
+
   const southPos = lodash.zipObject(
     southLayer,
+      // @ts-ignore
     southLayer.map((v: any, i: number) => {
       return i;
     }),

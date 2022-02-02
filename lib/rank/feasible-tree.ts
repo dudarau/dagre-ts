@@ -76,6 +76,7 @@ function findMinSlackEdge(t: any, g: Graph) {
     if (t.hasNode(e.v) !== t.hasNode(e.w)) {
       return slack(g, e);
     }
+    return;
   });
 }
 

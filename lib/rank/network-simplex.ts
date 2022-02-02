@@ -231,6 +231,7 @@ function isTreeEdge(tree: any, u: any, v: any) {
  * Returns true if the specified node is descendant of the root node per the
  * assigned low and lim attributes in the tree.
  */
+// @ts-ignore
 function isDescendant(tree: any, vLabel: any, rootLabel: any) {
   return rootLabel.low <= vLabel.lim && vLabel.lim <= rootLabel.lim;
 }

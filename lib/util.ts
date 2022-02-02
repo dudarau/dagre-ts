@@ -239,5 +239,6 @@ export function time(name: string, fn: any) {
 }
 
 export function notime(name: string, fn: any) {
+  console.log(name);
   return fn();
 }

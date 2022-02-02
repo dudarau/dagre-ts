@@ -19,15 +19,18 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
+import layout from "./layout";
+import * as debug from './debug';
+import {time, notime} from "./util";
+import version from './version';
 
 export default {
-  graphlib: require("./lib/graphlib"),
 
-  layout: require("./lib/layout"),
-  debug: require("./lib/debug"),
+  layout,
+  debug,
   util: {
-    time: require("./lib/util").time,
-    notime: require("./lib/util").notime
+    time,
+    notime,
   },
-  version: require("./lib/version")
+  version,
 };

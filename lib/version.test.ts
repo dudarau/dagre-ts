@@ -1,4 +1,7 @@
-import normalize from './normalize';
+// @ts-ignore
+import * as normalize from './normalize';
+
+
 // const expect from "../test/chai").expect;
 //
 // describe("version", function() {

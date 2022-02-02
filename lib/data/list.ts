@@ -11,6 +11,7 @@ export class List {
     this._sentinel = sentinel;
   }
   dequeue() {}
+  // @ts-ignore
   enqueue(entry: any) {}
 }
 

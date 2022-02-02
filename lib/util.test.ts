@@ -159,7 +159,7 @@ describe('util', function () {
   });
 
   describe('time', function () {
-    let consoleLog: any;
+    // let consoleLog: any;
 
     // TODO: implement the tests
 
