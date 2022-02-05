@@ -10,6 +10,7 @@ import order from './order';
 import position from './position';
 import * as util from './util';
 import { Edge, Graph } from 'graphlib';
+import lodash from './lodash';
 
 export default layout;
 
@@ -422,12 +423,14 @@ function removeSelfEdges(g: Graph) {
 
 function insertSelfEdges(g: Graph) {
   const layers = util.buildLayerMatrix(g);
+  console.log(layers);
   layers.forEach((layer: any) => {
     let orderShift = 0;
-    Object.keys(layer).forEach((v, i) => {
+    lodash.forEach(layer, (v: any, i: any) => {
+      console.log(v, i);
       const node = g.node(v);
       node.order = i + orderShift;
-      node.selfEdges.forEach((selfEdge: any) => {
+      node.selfEdges?.forEach((selfEdge: any) => {
         util.addDummyNode(
           g,
           'selfedge',
@@ -491,7 +494,7 @@ function selectNumberAttrs(obj: any, attrs: any) {
 
 function canonicalize(attrs: any) {
   const newAttrs = {} as any;
-  Object.keys(attrs).forEach((v) => {
+  Object.keys(attrs).forEach(v => {
     newAttrs[v.toLowerCase()] = v;
   });
   return newAttrs;

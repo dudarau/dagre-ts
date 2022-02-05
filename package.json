@@ -5,6 +5,12 @@
   "author": "Aliaksei Dudarau <dudarau.au@gmail.com>",
   "contributors": [],
   "license": "MIT",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.mjs",
+  "umd:main": "dist/index.umd.js",
+  "unpkg": "dist/index.umd.js",
+  "jsdelivr": "dist/index.umd.js",
+  "jsnext:main": "dist/index.esm.mjs",
   "source": "lib/index.ts",
   "keywords": [
     "graph",
@@ -18,7 +24,8 @@
   },
   "dependencies": {
     "graphlib": "^2.1.8",
-    "lodash": "^4.17.19"
+    "lodash": "^4.17.19",
+    "react-hook-form": "^7.25.3"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^21.0.1",

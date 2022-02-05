@@ -16,9 +16,8 @@ export function createRollupConfig(options, callback) {
     output: {
       file: outputName,
       format: options.format,
-      name: 'ReactHookForm',
+      name: 'dagre-ts',
       sourcemap: true,
-      globals: { react: 'React' },
       exports: 'named',
     },
     plugins: [

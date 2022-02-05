@@ -2,12 +2,8 @@ import { Graph } from 'graphlib';
 import * as util from './util';
 import lodash from './lodash';
 
-module.exports = {
-  debugOrdering: debugOrdering,
-};
-
 /* istanbul ignore next */
-function debugOrdering(g: Graph) {
+export function debugOrdering(g: Graph) {
   const layerMatrix = util.buildLayerMatrix(g);
 
   const h = new Graph({ compound: true, multigraph: true }).setGraph({});
