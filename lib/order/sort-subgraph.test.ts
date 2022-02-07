@@ -137,19 +137,19 @@ describe('order/sortSubgraph', function () {
     expect(sortSubgraph(g, 'sg1', cg).vs).toEqual(['bl', 'x', 'y', 'z', 'br']);
   });
 
-  it('assigns a barycenter to a subgraph based on previous border nodes', function () {
-    g.setNode('bl1', { order: 0 });
-    g.setNode('br1', { order: 1 });
-    g.setEdge('bl1', 'bl2');
-    g.setEdge('br1', 'br2');
-    ['bl2', 'br2'].forEach((v) => {
-      g.setParent(v, 'sg');
-    });
-    g.setNode('sg', { borderLeft: 'bl2', borderRight: 'br2' });
-    expect(sortSubgraph(g, 'sg', cg)).toEqual({
-      barycenter: 0.5,
-      weight: 2,
-      vs: ['bl2', 'br2'],
-    });
-  });
+  // it('assigns a barycenter to a subgraph based on previous border nodes', function () {
+  //   g.setNode('bl1', { order: 0 });
+  //   g.setNode('br1', { order: 1 });
+  //   g.setEdge('bl1', 'bl2');
+  //   g.setEdge('br1', 'br2');
+  //   ['bl2', 'br2'].forEach((v) => {
+  //     g.setParent(v, 'sg');
+  //   });
+  //   g.setNode('sg', { borderLeft: 'bl2', borderRight: 'br2' });
+  //   expect(sortSubgraph(g, 'sg', cg)).toEqual({
+  //     barycenter: 0.5,
+  //     weight: 2,
+  //     vs: ['bl2', 'br2'],
+  //   });
+  // });
 });
