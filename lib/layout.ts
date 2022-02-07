@@ -10,6 +10,7 @@ import order from './order';
 import position from './position';
 import * as util from './util';
 import { Edge, Graph } from 'graphlib';
+import lodash from './lodash';
 
 export default layout;
 
@@ -171,45 +172,27 @@ const edgeAttrs = ['labelpos'];
  * layout graph. Thus this function serves as a good place to determine what
  * attributes can influence layout.
  */
-function buildLayoutGraph(inputGraph: Graph) {
+function buildLayoutGraph(inputGraph: any) {
   const g = new Graph({ multigraph: true, compound: true });
   const graph = canonicalize(inputGraph.graph());
 
-  const newGraph = {
-    ...graphDefaults,
-    ...selectNumberAttrs(graph, graphNumAttrs),
-    ...Object.keys(graphAttrs).reduce((acc, key) => {
-      return {
-        ...acc,
-        ...graph[key],
-      };
-    }, {}),
-  };
+  g.setGraph(lodash.merge({},
+      graphDefaults,
+      selectNumberAttrs(graph, graphNumAttrs),
+      lodash.pick(graph, graphAttrs)));
 
-  g.setGraph(newGraph);
-
-  inputGraph.nodes().forEach(v => {
+  lodash.forEach(inputGraph.nodes(), function(v:any) {
     const node = canonicalize(inputGraph.node(v));
-
-    const defaults = (...args: any[]) =>
-      args.reverse().reduce((acc, obj) => ({ ...acc, ...obj }), {});
-    g.setNode(v, defaults(selectNumberAttrs(node, nodeNumAttrs), nodeDefaults));
-    g.setParent(v, inputGraph.parent(v) as string);
+    g.setNode(v, lodash.defaults(selectNumberAttrs(node, nodeNumAttrs), nodeDefaults));
+    g.setParent(v, inputGraph.parent(v));
   });
 
-  inputGraph.edges().forEach(e => {
+  lodash.forEach(inputGraph.edges(), function(e: any) {
     const edge = canonicalize(inputGraph.edge(e));
-    const newEdge = {
-      ...edgeDefaults,
-      ...selectNumberAttrs(edge, edgeNumAttrs),
-      ...Object.keys(edgeAttrs).reduce((acc, key) => {
-        return {
-          ...acc,
-          ...edge[key],
-        };
-      }, {}),
-    };
-    g.setEdge(e, newEdge);
+    g.setEdge(e, lodash.merge({},
+        edgeDefaults,
+        selectNumberAttrs(edge, edgeNumAttrs),
+        lodash.pick(edge, edgeAttrs)));
   });
 
   return g;
@@ -391,7 +374,8 @@ function removeBorderNodes(g: Graph) {
       const t = g.node(node.borderTop);
       const b = g.node(node.borderBottom);
       const l = g.node(node.borderLeft[node.borderLeft.length - 1]);
-      const r = g.node(node.borderRight[node.borderRight - 1]);
+      const r = g.node(node.borderRight[node.borderRight.length - 1]);
+      console.log(node, t, b, l, r);
 
       node.width = Math.abs(r.x - l.x);
       node.height = Math.abs(b.y - t.y);
@@ -422,12 +406,14 @@ function removeSelfEdges(g: Graph) {
 
 function insertSelfEdges(g: Graph) {
   const layers = util.buildLayerMatrix(g);
+  console.log(layers);
   layers.forEach((layer: any) => {
     let orderShift = 0;
-    Object.keys(layer).forEach((v, i) => {
+    lodash.forEach(layer, (v: any, i: any) => {
+      console.log(v, i);
       const node = g.node(v);
       node.order = i + orderShift;
-      node.selfEdges.forEach((selfEdge: any) => {
+      node.selfEdges?.forEach((selfEdge: any) => {
         util.addDummyNode(
           g,
           'selfedge',
@@ -486,13 +472,13 @@ const pick = (obj: any, attrs: any) =>
   }, {});
 
 function selectNumberAttrs(obj: any, attrs: any) {
-  return mapValues(pick(obj, attrs), Number);
+  return lodash.mapValues(lodash.pick(obj, attrs), Number);
 }
 
 function canonicalize(attrs: any) {
-  const newAttrs = {} as any;
-  Object.keys(attrs).forEach((v) => {
-    newAttrs[v.toLowerCase()] = v;
+  const newAttrs = {};
+  lodash.forEach(attrs, function(v:any, k:any) {
+    newAttrs[k.toLowerCase()] = v;
   });
   return newAttrs;
 }
