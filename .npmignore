@@ -3,5 +3,7 @@
 /Makefile
 /node_modules
 /src
+/lib
 /test
 /tmp
+/.idea

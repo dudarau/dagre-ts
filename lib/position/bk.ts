@@ -74,7 +74,7 @@ export function findType2Conflicts(g: Graph, layering: any) {
     nextNorthBorder: any,
   ) {
     let v: any;
-    lodash.range(southPos, southEnd).forEach((i: string) => {
+    lodash.range(southPos, southEnd).forEach((i: number) => {
       v = south[i];
       if (g.node(v).dummy) {
         (g.predecessors(v) as string[]).forEach(u => {
@@ -114,10 +114,12 @@ export function findType2Conflicts(g: Graph, layering: any) {
 
 function findOtherInnerSegmentNode(g: Graph, v: any) {
   if (g.node(v).dummy) {
-    return lodash.find(g.predecessors(v), function (u: any) {
+    return lodash.find(g.predecessors(v) as any, function (u: any) {
       return g.node(u).dummy;
     });
   }
+
+  return undefined;
 }
 
 export function addConflict(conflicts: any, v: any, w: any) {
@@ -333,7 +335,7 @@ export function balance(xss: any, align?: any) {
     if (align) {
       return xss[align.toLowerCase()][v];
     } else {
-      const xs = lodash.sortBy(lodash.map(xss, v));
+      const xs = lodash.sortBy(lodash.map(xss, v)) as any;
       return (xs[1] + xs[2]) / 2;
     }
   });

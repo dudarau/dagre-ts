@@ -26,7 +26,7 @@ export default function sort(entries: any, biasRight?: any) {
     vsIndex = consumeUnsortable(vs, unsortable, vsIndex);
   });
 
-  const result = { vs: lodash.flatten(vs, true) } as any;
+  const result = { vs: lodash.flatten(vs) } as any;
   if (weight) {
     result.barycenter = sum / weight;
     result.weight = weight;
@@ -34,7 +34,7 @@ export default function sort(entries: any, biasRight?: any) {
   return result;
 }
 
-function consumeUnsortable(vs: any, unsortable: any, index: number) {
+function consumeUnsortable(vs: any, unsortable: any[], index: number) {
   let last;
   while (unsortable.length && (last = lodash.last(unsortable)).i <= index) {
     unsortable.pop();

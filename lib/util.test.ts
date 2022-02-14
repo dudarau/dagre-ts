@@ -158,6 +158,20 @@ describe('util', function () {
     });
   });
 
+  describe('addDummyNode', function () {
+    it.only('creates dummy node', function () {
+      const g = new Graph();
+      g.setNode('a', { rank: 0, order: 0 });
+      g.setNode('b', { rank: 0, order: 1 });
+      g.setNode('c', { rank: 1, order: 0 });
+      g.setNode('d', { rank: 1, order: 1 });
+      g.setNode('e', { rank: 2, order: 0 });
+
+      // (g, 'border', label, prefix);
+      expect(util.addDummyNode(g, 'root', {}, '_root')).toEqual('_root1');
+    });
+  });
+
   describe('time', function () {
     // let consoleLog: any;
 

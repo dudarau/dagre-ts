@@ -45,7 +45,7 @@ function twoLayerCrossCount(g: Graph, northLayer: any, southLayer: any) {
         'pos',
       );
     }),
-    true,
+    // true,
   );
 
   // Build the accumulator tree

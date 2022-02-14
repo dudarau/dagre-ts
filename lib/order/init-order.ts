@@ -24,7 +24,7 @@ export default function initOrder(g: Graph) {
   );
   const layers = lodash.range(maxRank + 1).map(() => {
     return [];
-  });
+  }) as any;
 
   function dfs(v: any) {
     if (lodash.has(visited, v)) return;
