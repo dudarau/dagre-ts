@@ -17,4 +17,4 @@ const options = [
   },
 ];
 
-export default options.map((option) => createRollupConfig(option));
+export default options.map(option => createRollupConfig(option));

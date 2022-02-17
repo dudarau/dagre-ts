@@ -3,6 +3,7 @@ import external from 'rollup-plugin-peer-deps-external';
 import sourcemaps from 'rollup-plugin-sourcemaps';
 import { terser } from 'rollup-plugin-terser';
 import typescript from 'rollup-plugin-typescript2';
+import dts from 'rollup-plugin-dts';
 
 export function createRollupConfig(options, callback) {
   const name = options.name;

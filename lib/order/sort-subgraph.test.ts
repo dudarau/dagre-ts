@@ -41,8 +41,6 @@ describe('order/sortSubgraph', function () {
 
     const result = sortSubgraph(g, 'movable', cg).vs;
 
-    console.log('result ', result);
-
     expect(result).toEqual(['x', 'y', 'z']);
   });
 
