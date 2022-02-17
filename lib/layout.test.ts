@@ -1,15 +1,16 @@
 import layout from './layout';
-import { Graph } from 'graphlib';
+import { graphlib } from './types';
+import {Graph} from "graphlib";
 
 describe('layout', function () {
-  let g: Graph;
+  let g: graphlib.Graph;
 
   beforeEach(function () {
     g = new Graph({ multigraph: true, compound: true })
       .setGraph({})
       .setDefaultEdgeLabel(function () {
         return {};
-      });
+      }) as unknown as graphlib.Graph;
   });
 
   it('can layout a single node', function () {
@@ -206,7 +207,7 @@ describe('layout', function () {
     ['a', 'b', 'c', 'd', 'x', 'y'].forEach(v => {
       g.setNode(v, { width: 50, height: 50 });
     });
-    g.setPath(['a', 'b', 'c', 'd']);
+    (g as any).setPath(['a', 'b', 'c', 'd']);
     g.setEdge('a', 'x', { weight: 100 });
     g.setEdge('y', 'd', { weight: 100 });
     g.setParent('x', 'sg');
@@ -293,7 +294,7 @@ describe('layout', function () {
   });
 });
 
-function extractCoordinates(g: Graph) {
+function extractCoordinates(g: graphlib.Graph) {
   const nodes = g.nodes();
 
   return nodes.reduce((acc: any, v: any) => {

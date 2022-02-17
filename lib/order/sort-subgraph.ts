@@ -7,24 +7,17 @@ import lodash from '../lodash';
 export default function sortSubgraph(g: Graph, v: any, cg: any, biasRight?: any) {
   let movable = g.children(v);
   const node = g.node(v);
-  console.log('***', node, movable);
   const bl = node ? node.borderLeft : undefined;
   const br = node ? node.borderRight : undefined;
   const subgraphs = {} as any;
 
-  console.log('****', 'movable', movable, bl, br);
-
   if (bl) {
     movable = movable.filter(w => {
-      console.log('movable filter', w, bl, br);
       return w !== bl && w !== br;
     });
   }
 
-  console.log('*****', movable);
-
   const barycenters = barycenter(g, movable);
-  console.log('***** output', barycenters);
   barycenters?.forEach((entry: any) => {
     if (g.children(entry.v).length) {
       const subgraphResult = sortSubgraph(g, entry.v, cg, biasRight);
@@ -46,19 +39,16 @@ export default function sortSubgraph(g: Graph, v: any, cg: any, biasRight?: any)
     if (predecessors.length) {
       const blPred = g.node(predecessors[0]),
         brPred = g.node(predecessors[0]);
-      console.log('******', result);
       if (!lodash.has(result, 'barycenter')) {
         result.barycenter = 0;
         result.weight = 0;
       }
       result.barycenter =
         (result.barycenter * result.weight + blPred.order + brPred.order) / (result.weight + 2);
-      console.log('******1', result.barycenter, result.weight, blPred.order, brPred.order, result.weight);
       result.weight += 2;
     }
   }
 
-  console.log('******2', result);
   return result;
 }
 

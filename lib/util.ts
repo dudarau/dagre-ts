@@ -140,7 +140,6 @@ export function normalizeRanks(g: Graph) {
   );
   g.nodes().forEach(v => {
     const node = g.node(v);
-    console.log(node, min)
     if (lodash.has(node, 'rank')) {
       node.rank -= min;
     }
@@ -238,7 +237,9 @@ export function time(name: string, fn: any) {
   }
 }
 
-export function notime(name: string, fn: any) {
-  console.log(name);
+export function notime(name: string, fn: any, debug?: boolean) {
+  if (debug) {
+    console.log(name);
+  }
   return fn();
 }

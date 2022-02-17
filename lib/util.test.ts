@@ -159,7 +159,7 @@ describe('util', function () {
   });
 
   describe('addDummyNode', function () {
-    it.only('creates dummy node', function () {
+    it('creates dummy node', function () {
       const g = new Graph();
       g.setNode('a', { rank: 0, order: 0 });
       g.setNode('b', { rank: 0, order: 1 });
