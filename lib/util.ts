@@ -117,7 +117,7 @@ export function intersectRect(rect: any, point: any) {
 export function buildLayerMatrix(g: Graph) {
   const layering = lodash.range(maxRank(g) + 1).map(() => {
     return [];
-  });
+  }) as any;
   g.nodes().forEach(v => {
     const node = g.node(v);
     const rank = node.rank;

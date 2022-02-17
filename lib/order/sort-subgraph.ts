@@ -41,7 +41,7 @@ export default function sortSubgraph(g: Graph, v: any, cg: any, biasRight?: any)
   const result = sort(entries, biasRight);
 
   if (bl) {
-    result.vs = lodash.flatten([bl, result.vs, br], true);
+    result.vs = lodash.flatten([bl, result.vs, br]); // true
     const predecessors = g.predecessors(bl) as any;
     if (predecessors.length) {
       const blPred = g.node(predecessors[0]),
@@ -71,7 +71,7 @@ function expandSubgraphs(entries: any, subgraphs: Graph[]) {
         }
         return v;
       }),
-      true,
+      // true,
     );
   });
 }
